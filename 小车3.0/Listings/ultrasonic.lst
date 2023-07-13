@@ -1,0 +1,110 @@
+C51 COMPILER V9.60.0.0   ULTRASONIC                                                        06/20/2023 10:14:42 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ULTRASONIC
+OBJECT MODULE PLACED IN .\Objects\ultrasonic.obj
+COMPILER INVOKED BY: E:\Keil uVision5\Keil-MDK\C51\BIN\C51.EXE ultrasonic.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND 
+                    -PRINT(.\Listings\ultrasonic.lst) TABS(3) OBJECT(.\Objects\ultrasonic.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "ACTION.h"
+   3          sbit TRIG = P0^2;
+   4          sbit ECHO = P0^1;
+   5          
+   6          void Delay20us()     //@11.0592MHz
+   7          {
+   8   1         unsigned char i;
+   9   1      
+  10   1         i = 6;
+  11   1         while (--i);
+  12   1      }
+  13          
+  14          void Delay100us()    //@11.0592MHz
+  15          {
+  16   1         unsigned char i, j;
+  17   1      
+  18   1         i = 2;
+  19   1         j = 15;
+  20   1         do
+  21   1         {
+  22   2            while (--j);
+  23   2         } while (--i);
+  24   1      }
+  25          
+  26          void Timer2_Init(void)              //定时器初始化
+  27          {
+  28   1         T2MOD = 0;                       //初始化模式寄存器
+  29   1         T2CON = 0;                       //初始化控制寄存器
+  30   1         TH2 = 0X00;                      //设置定时初值
+  31   1         TL2 = 0X00;                      //设置定时初值
+  32   1         TR2 = 0;                         //关闭定时器
+  33   1      }
+  34          
+  35          void ultrasonic_Init(void)          //超声波初始化
+  36          {
+  37   1         TRIG=0;                          //置控制端为低电平
+  38   1         ECHO=1;                          //置接收端为高电平
+  39   1         Timer2_Init();
+  40   1      }
+  41          
+  42          void ultrasonic_action(void)        //超声波测距  :返回值  cm  所测出距离与设定距离比较，作出反应
+  43          {
+  44   1         unsigned int Limitdistance = 20; //小车与障碍物的限制距离
+  45   1         unsigned int time;
+  46   1         float distance; 
+  47   1            
+  48   1         //1.触发信号
+  49   1         TRIG = 1;                        //拉高控制端
+  50   1         Delay20us();                     //延时20us
+  51   1         TRIG = 0;                        //拉低控制端
+  52   1         
+  53   1         //2.模块内部发出信号：循环发出8个40KHz脉冲。
+  54   1         //模块内部操作，不需人工干预
+C51 COMPILER V9.60.0.0   ULTRASONIC                                                        06/20/2023 10:14:42 PAGE 2   
+
+  55   1         
+  56   1         //3.输出回响信号
+  57   1         //回响电平输出与检测距离成正比
+  58   1         //通过定时器的计数次数，得出超声波高电平所需要的时间
+  59   1         
+  60   1         while(ECHO == 0);                //等待高电平到来
+  61   1         TH2 = 0X00; 
+  62   1         TL2 = 0X00;                      //将计数次数清零
+  63   1         TR2 = 1;                         //打开定时器,开始计数
+  64   1         while(ECHO == 1);                //等待高电平结束，低电平到来
+  65   1         TR2 = 0;                         //关闭定时器,停止计数
+  66   1         time = TH2 * 256 + TL2;          //组成16位数据
+  67   1         
+  68   1         distance = (time*0.00034/2)*100; //距离公式,换算单位cm
+  69   1         
+  70   1         if(distance<Limitdistance)       //小于限制距离
+  71   1         {
+  72   2            action_retreat();
+  73   2            Delay20us();
+  74   2            action_stayleft();
+  75   2            if(distance>Limitdistance)
+  76   2            {
+  77   3               action_stright();
+  78   3            }  
+  79   2         }
+  80   1         else
+  81   1         {
+  82   2            action_stright();
+  83   2         }
+  84   1      }  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    179    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

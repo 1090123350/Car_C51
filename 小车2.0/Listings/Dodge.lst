@@ -1,0 +1,43 @@
+C51 COMPILER V9.60.0.0   DODGE                                                             06/15/2023 16:47:06 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DODGE
+OBJECT MODULE PLACED IN .\Objects\Dodge.obj
+COMPILER INVOKED BY: E:\Keil uVision5\Keil-MDK\C51\BIN\C51.EXE Dodge.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\Listings\Dodge.lst) TABS(3) OBJECT(.\Objects\Dodge.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "ACTION.H"
+   3          
+   4          
+   5          sbit D1=P0^6;//×ó
+   6          sbit D2=P0^7;//ÓÒ
+   7          
+   8          
+   9          void Dodge()
+  10          {
+  11   1         ;
+  12   1      }
+  13          
+  14          
+  15          
+  16          
+  17          
+  18          
+  19          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      1    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

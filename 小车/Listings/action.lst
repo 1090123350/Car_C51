@@ -1,0 +1,98 @@
+C51 COMPILER V9.60.0.0   ACTION                                                            06/16/2023 18:38:33 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ACTION
+OBJECT MODULE PLACED IN .\Objects\action.obj
+COMPILER INVOKED BY: E:\Keil uVision5\Keil-MDK\C51\BIN\C51.EXE action.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRIN
+                    -T(.\Listings\action.lst) TABS(3) OBJECT(.\Objects\action.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          sbit IN1 = P3^7;
+   4          sbit IN2 = P3^6;
+   5          sbit IN3 = P3^5;
+   6          sbit IN4 = P3^4;
+   7          sbit ENA = P1^3;
+   8          sbit ENB = P1^2;
+   9          
+  10          //左轮P3_4 ; P3_5;
+  11          //右轮P3_6 ; P3_7;
+  12          
+  13          void action_Init()//初始化，制动状态
+  14          {
+  15   1         IN1=0;IN2=0;
+  16   1         IN3=0;IN4=0;
+  17   1      }
+  18          
+  19          void action_stright()//前进
+  20          {
+  21   1         IN1=0;IN2=1;//左轮
+  22   1         IN3=0;IN4=1;//右轮
+  23   1      }
+  24          
+  25          void action_retreat()//后退
+  26          {
+  27   1         IN1=1;IN2=0;//左轮
+  28   1         IN3=1;IN4=0;//右轮
+  29   1      }
+  30          
+  31          void action_left()//左转
+  32          {
+  33   1         IN1=0;IN2=0;//左轮后退
+  34   1         IN3=0;IN4=1;//右轮前进
+  35   1      }
+  36          
+  37          void action_right()//右转
+  38          {
+  39   1         IN3=0;IN4=0;//右轮后退
+  40   1         IN1=0;IN2=1;//左轮前进
+  41   1      }
+  42          
+  43          void action_stop()//停止，两轮均制动
+  44          {
+  45   1         IN1=0;IN2=0;
+  46   1         IN3=0;IN4=0;
+  47   1      }
+  48          
+  49          void PWM_On()
+  50          {
+  51   1         ENA=1;
+  52   1         ENB=1;
+  53   1      }
+  54          
+C51 COMPILER V9.60.0.0   ACTION                                                            06/16/2023 18:38:33 PAGE 2   
+
+  55          void PWM_Off()
+  56          {
+  57   1         ENA=0;
+  58   1         ENB=0;
+  59   1      }
+  60          
+  61          void action_stayleft()//左转
+  62          {
+  63   1         IN1=1;IN2=0;//左轮后退
+  64   1         IN3=0;IN4=1;//右轮前进
+  65   1      }
+  66          
+  67          void action_stayright()//右转
+  68          {
+  69   1         IN3=1;IN4=0;//右轮后退
+  70   1         IN1=0;IN2=1;//左轮前进
+  71   1      }
+  72          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     82    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

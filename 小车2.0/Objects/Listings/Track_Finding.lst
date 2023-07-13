@@ -1,0 +1,79 @@
+C51 COMPILER V9.60.0.0   TRACK_FINDING                                                     06/10/2023 08:48:52 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TRACK_FINDING
+OBJECT MODULE PLACED IN .\Objects\Track_Finding.obj
+COMPILER INVOKED BY: E:\Keil uVision5\Keil-MDK\C51\BIN\C51.EXE Track_Finding.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTE
+                    -ND PRINT(.\Listings\Track_Finding.lst) TABS(3) OBJECT(.\Objects\Track_Finding.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "ACTION.H"
+   3          
+   4          sbit Tc1=P0^4;//左
+   5          sbit Tc2=P0^5;//右
+   6          
+   7          void Delay50ms()     //@11.0592MHz 延时函数
+   8          {
+   9   1         unsigned char i, j;
+  10   1      
+  11   1         i = 90;
+  12   1         j = 163;
+  13   1         do
+  14   1         {
+  15   2            while (--j);
+  16   2         } while (--i);
+  17   1      }
+  18          
+  19          void Track_Finding()
+  20          {
+  21   1         if(Tc1==0&&Tc2==0)//两端都检测到黑线
+  22   1         {
+  23   2            action_stright();
+  24   2         }
+  25   1         if(Tc1==0&&Tc2==1)//左端检测到黑线，右端没有
+  26   1         {
+  27   2            action_left();//左转
+  28   2            if(Tc1==0&&Tc2==0)
+  29   2            {
+  30   3               action_stright();
+  31   3            }
+  32   2            if(Tc1==1&&Tc2==1)//两端都没检测到黑线，原地右转
+  33   2            {
+  34   3               Delay50ms();
+  35   3               action_right();
+  36   3            }
+  37   2         }
+  38   1         if(Tc1==1&&Tc2==0)//右端检测到黑线，左端没有
+  39   1         {
+  40   2            action_right();
+  41   2            if(Tc1==0&&Tc2==0)
+  42   2            {
+  43   3               action_stright();
+  44   3            }
+  45   2            if(Tc1==1&&Tc2==1)//两端都没检测到黑线，原地左转
+  46   2            {
+  47   3               Delay50ms();
+  48   3               action_left();//左转
+  49   3            }
+  50   2         }
+  51   1         
+  52   1         
+  53   1      }
+
+C51 COMPILER V9.60.0.0   TRACK_FINDING                                                     06/10/2023 08:48:52 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     79    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

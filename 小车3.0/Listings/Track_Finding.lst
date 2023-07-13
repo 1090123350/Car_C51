@@ -1,0 +1,74 @@
+C51 COMPILER V9.60.0.0   TRACK_FINDING                                                     06/19/2023 22:49:56 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TRACK_FINDING
+OBJECT MODULE PLACED IN .\Objects\Track_Finding.obj
+COMPILER INVOKED BY: E:\Keil uVision5\Keil-MDK\C51\BIN\C51.EXE Track_Finding.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTE
+                    -ND PRINT(.\Listings\Track_Finding.lst) TABS(3) OBJECT(.\Objects\Track_Finding.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "ACTION.H"
+   3          
+   4          sbit Tc1=P2^3;//d1
+   5          sbit Tc2=P2^2;//d2
+   6          sbit Tc3=P2^0;//d3
+   7          sbit Tc4=P2^1;//d4
+   8          
+   9          
+  10          void Track_Finding()
+  11          {
+  12   1         if(Tc1 == 0 && Tc2 == 0 && Tc3 == 0 && Tc4 == 0) //均未检测到黑线
+  13   1         {
+  14   2            action_stright();
+  15   2         }
+  16   1         if(Tc1 == 0 && Tc2 == 0 && Tc3 == 1 && Tc4 == 0) //3检测到黑线，小幅度右倾，小幅度左转
+  17   1         {
+  18   2            action_stayleft();                            //小幅度左转
+  19   2         }
+  20   1         if(Tc1 == 0 && Tc2 == 0 && Tc3 == 0 && Tc4 == 1) //4检测到黑线，大幅度右倾，大幅度左转
+  21   1         {
+  22   2            action_stayleft();                                  //大幅度左转
+  23   2            action_stayleft();                               
+  24   2         }
+  25   1         if(Tc1 == 0 && Tc2 == 0 && Tc3 == 1 && Tc4 == 1) //34均检测到黑线，大幅度左转
+  26   1         {
+  27   2            action_stayleft();                                  //大幅度左转
+  28   2            action_stayleft();
+  29   2         }
+  30   1         if(Tc1 == 0 && Tc2 == 1 && Tc3 == 0 && Tc4 == 0) //2检测到黑线，小幅度左倾，小幅度右转
+  31   1         {
+  32   2            action_stayright();                           //小幅度右转
+  33   2         }
+  34   1         if(Tc1 == 1 && Tc2 == 0 && Tc3 == 0 && Tc4 == 0) //1检测到黑线，大幅度左倾，大幅度右转
+  35   1         {
+  36   2            action_stayright();                              //大幅度右转
+  37   2            action_stayright();
+  38   2         }
+  39   1         if(Tc1 == 1 && Tc2 == 1 && Tc3 == 0 && Tc4 == 0) //12均检测到黑线，大幅度右转
+  40   1         {
+  41   2            action_stayright();                                 //大幅度右转
+  42   2            action_stayright();
+  43   2         }
+  44   1         if(Tc1 == 1 && Tc2 == 1 && Tc3 == 1 && Tc4 == 1) //1234均检测到黑线，停
+  45   1         {  
+  46   2            action_stop();
+  47   2         }
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    133    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   TRACK_FINDING                                                     06/19/2023 22:49:56 PAGE 2   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

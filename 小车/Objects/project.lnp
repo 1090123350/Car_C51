@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\Uart.obj",
+".\Objects\action.obj",
+".\Objects\Timer0.obj",
+".\Objects\Track_Finding.obj",
+".\Objects\Dodge.obj" 
+TO ".\Objects\project" 
+PRINT(".\Listings\project.m51") RAMSIZE(256) 

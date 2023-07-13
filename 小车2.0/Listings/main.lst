@@ -1,0 +1,139 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              06/19/2023 22:41:32 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\Keil uVision5\Keil-MDK\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\main.lst) TABS(3) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "UART.H"
+   3          #include "ACTION.H"
+   4          #include "TIMER0.H"
+   5          #include "TRACK_FINDING.H"
+   6          
+   7          unsigned char Flag=0,PWM_Flag=10,Mod_Flag=1;
+   8          
+   9          void main()
+  10          {
+  11   1         Timer0_Init();
+  12   1         action_Init();
+  13   1         Uart_Init();
+  14   1         while(1)
+  15   1         {
+  16   2            if(Mod_Flag==1)//蓝牙模式
+  17   2            {
+  18   3               if(Flag==0)
+  19   3               {
+  20   4                  action_stop();
+  21   4               }
+  22   3               if(Flag==1)
+  23   3               {
+  24   4                  action_stright();
+  25   4               }
+  26   3               if(Flag==2)
+  27   3               {
+  28   4                  action_retreat();    
+  29   4               }
+  30   3               if(Flag==3)
+  31   3               {
+  32   4                  action_left();    
+  33   4               }
+  34   3               if(Flag==4)
+  35   3               {
+  36   4                  action_right();      
+  37   4               }
+  38   3            }
+  39   2            if(Mod_Flag==2)//寻迹模式
+  40   2            {
+  41   3               PWM_Flag=20;
+  42   3               Track_Finding();
+  43   3            }
+  44   2            if(Mod_Flag==3)//避障模式
+  45   2            {
+  46   3               PWM_Flag=20;
+  47   3               ;
+  48   3            }
+  49   2         }
+  50   1      }
+  51          
+  52          /**********************************************************************************
+  53             *  @brief 
+  54             *  @param 
+C51 COMPILER V9.60.0.0   MAIN                                                              06/19/2023 22:41:32 PAGE 2   
+
+  55             *  @retval 
+  56          **********************************************************************************/
+  57          
+  58          void PWM_Routine() interrupt 1 //PWM调速
+  59          {
+  60   1         static unsigned char Tcount=0;
+  61   1         TL0 = 0xA4;          //设置定时初始值
+  62   1         TH0 = 0xFF;          //设置定时初始值
+  63   1         Tcount++;
+  64   1         if(Tcount>=100)
+  65   1         {
+  66   2            Tcount=0;
+  67   2         }
+  68   1         if(Tcount<PWM_Flag)
+  69   1         {
+  70   2            PWM_On();
+  71   2         }
+  72   1         else
+  73   1         {
+  74   2            PWM_Off();
+  75   2         }
+  76   1      
+  77   1      }
+  78          
+  79          /**********************************************************************************
+  80             *  @brief 
+  81             *  @param 
+  82             *  @retval 
+  83          **********************************************************************************/
+  84          
+  85          void Bluetooth_Routine() interrupt 4 //蓝牙控制
+  86          {
+  87   1         unsigned char count=0;
+  88   1         if(RI==1)
+  89   1         {
+  90   2            count=SBUF-48;
+  91   2            Uart_Send(count+48);
+  92   2            switch(count)
+  93   2            {
+  94   3               //运动控制
+  95   3               case 0:Flag=0;break;//停止
+  96   3               case 1:Flag=1;break;//前进
+  97   3               case 2:Flag=2;break;//后退
+  98   3               case 3:Flag=3;break;//左转
+  99   3               case 4:Flag=4;break;//右转
+ 100   3               //档位控制
+ 101   3               case 5:PWM_Flag=20;break;//一档
+ 102   3               case 6:PWM_Flag=60;break;//二档
+ 103   3               case 7:PWM_Flag=100;break;//三档
+ 104   3               //模式控制
+ 105   3               case 8:Mod_Flag=1;break;//蓝牙模式
+ 106   3               case 9:Mod_Flag=2;break;//循迹模式
+ 107   3               case 10:Mod_Flag=3;break;//避障模式     前面的count不能为10，需修改
+ 108   3            }
+ 109   2            RI=0;
+ 110   2         }
+ 111   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    350    ----
+   CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.60.0.0   MAIN                                                              06/19/2023 22:41:32 PAGE 3   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
